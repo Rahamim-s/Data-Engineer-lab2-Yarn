@@ -5,6 +5,7 @@ import com.opstty.reducer.Q4_reducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -16,15 +17,15 @@ public class Question4 {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (otherArgs.length < 2) {
-            System.err.println("Usage: question1 <in> [<in>...] <out>");
+            System.err.println("Usage: question4 <in> [<in>...] <out>");
             System.exit(2);
         }
-        Job job = Job.getInstance(conf, "question1");
-        job.setJarByClass(Question1.class);
+        Job job = Job.getInstance(conf, "question4");
+        job.setJarByClass(Question4.class);
         job.setMapperClass(Q4_mapper.class);
         job.setCombinerClass(Q4_reducer.class);
         job.setReducerClass(Q4_reducer.class);
-        job.setOutputKeyClass(FloatWritable.class);
+        job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FloatWritable.class);
         for (int i = 0; i < otherArgs.length - 1; ++i) {
             FileInputFormat.addInputPath(job, new Path(otherArgs[i]));

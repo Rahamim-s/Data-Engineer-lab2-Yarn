@@ -17,10 +17,10 @@ public class Question2 {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (otherArgs.length < 2) {
-            System.err.println("Usage: question1 <in> [<in>...] <out>");
+            System.err.println("Usage: question2 <in> [<in>...] <out>");
             System.exit(2);
         }
-        Job job = Job.getInstance(conf, "question1");
+        Job job = Job.getInstance(conf, "question2");
         job.setJarByClass(Question1.class);
         job.setMapperClass(Q2_mapper.class);
         job.setCombinerClass(Q2_reducer.class);

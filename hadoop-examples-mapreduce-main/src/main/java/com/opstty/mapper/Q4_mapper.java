@@ -1,40 +1,36 @@
 package com.opstty.mapper;
 
-import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.*;
 
 import java.io.IOException;
 
-public class Q4_mapper extends Mapper<Object, Text, Text, FloatWritable> {
-    private Text treeSpecies = new Text();
-    private FloatWritable treeHeight = new FloatWritable();
+public class Q4_mapper extends Mapper<LongWritable, Text, Text, FloatWritable> {
 
-    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+    @Override
+    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        // Convertir la ligne de texte en une chaîne et la diviser en colonnes
         String line = value.toString();
+        String[] columns = line.split(";");
 
-        // Ignore the first row in every mapper
-        if (key.equals(0)) {
+        // Ignorer la première ligne (en-têtes de colonne)
+        if (columns[0].equals("GEOPOINT")) {
             return;
         }
 
-        String[] columns = line.split("\t");
+        // Extraire le genre et la hauteur de l'arbre
+        String genre = columns[2];
+        String heightStr = columns[6].trim();
 
-        if (columns.length < 7) {
-            return;
-        }
-
-        String species = columns[3];
-        String heightStr = columns[6];
-
+        // Ignorer les lignes qui n'ont pas de hauteur valide
         if (heightStr.isEmpty()) {
             return;
         }
 
+        // Convertir la hauteur en float
         float height = Float.parseFloat(heightStr);
 
-        treeSpecies.set(species);
-        treeHeight.set(height);
-        context.write(treeSpecies, treeHeight);
+        // Émettre la hauteur de l'arbre comme clé avec une valeur de 1
+        context.write(new Text(genre), new FloatWritable(height));
     }
 }

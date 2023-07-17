@@ -1,20 +1,26 @@
 package com.opstty.reducer;
 
-import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.*;
 
 import java.io.IOException;
 
 public class Q4_reducer extends Reducer<Text, FloatWritable, Text, FloatWritable> {
-    private FloatWritable maxHeight = new FloatWritable();
 
-    public void reduce(Text key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
-        float max = Float.MIN_VALUE;
+    @Override
+    protected void reduce(Text key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
+        // Initialiser la hauteur maximale à 0
+        float maxHeight = 0.0f;
+
+        // Parcourir toutes les hauteurs du genre d'arbre donné et trouver la plus grande
         for (FloatWritable value : values) {
-            max = Math.max(max, value.get());
+            float height = value.get();
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
         }
-        maxHeight.set(max);
-        context.write(key, maxHeight);
+
+        // Émettre le genre d'arbre et sa hauteur maximale
+        context.write(key, new FloatWritable(maxHeight));
     }
 }

@@ -19,6 +19,12 @@ public class AppDriver {
                     "A map/reduce program that counts the words in the input files.");
             programDriver.addClass("labcountQuestion4", Question4.class,
                     "A map/reduce program that counts the words in the input files.");
+            programDriver.addClass("labcountQuestion5", Question5.class,
+                    "A map/reduce program that counts the words in the input files.");
+            programDriver.addClass("labcountQuestion6", Question6.class,
+                    "A map/reduce program that counts the words in the input files.");
+            programDriver.addClass("labcountQuestion7", Question7.class,
+                    "A map/reduce program that counts the words in the input files.");
 
 
             exitCode = programDriver.run(argv);
